@@ -8,7 +8,9 @@ Collaborators:
 
 1. Lim Jia Chyuen
 
-1. Valiant
+1. Valiant Chen
+
+1. Jayden Lu
 
 ## **Google Colab Dev Notes**
 
