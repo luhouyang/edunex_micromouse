@@ -8,7 +8,7 @@ Collaborators:
 
 1. Lim Jia Chyuen
 
-1. Valiant Chen
+1. Chen Va Liant
 
 1. Jayden Lu
 
