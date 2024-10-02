@@ -10,7 +10,7 @@ Collaborators:
 
 1. Chen Va Liant
 
-1. Jayden Lu
+1. Jayden Lu Zheng Li
 
 ## **Google Colab Dev Notes**
 
