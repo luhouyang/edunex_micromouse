@@ -16,10 +16,20 @@ Collaborators:
 
 [Developers Notes](https://colab.research.google.com/drive/1OhPtsug7c6ERH516GHHfrw8AQKe1pcUC?usp=sharing)
 
+## **Bill of Materials**
+
+[Google Sheet](https://docs.google.com/spreadsheets/d/1ZZu8l19GLcMKLnv5OAhw-kwXTlIrgD-ZDA4Fticfcko/edit?usp=sharing)
+
 ## **CHANGELOG**
 
-**[10/1/2024]**
+**[1/10/2024]**
 
 - Complete module draft.
 - Explore the topic & evaluate feasibility.
 - Scout for potential collaborators & trainers.
+
+**[7/10/2024]**
+
+- Start on full tutorial
+- Started Bill of Materials
+- Added GitHub rules
