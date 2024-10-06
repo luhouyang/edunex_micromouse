@@ -12,6 +12,8 @@ Collaborators:
 
 1. Jayden Lu Zheng Li
 
+find your workspace in `/src/YOUR_NAME`
+
 ## **Google Colab Dev Notes**
 
 [Developers Notes](https://colab.research.google.com/drive/1OhPtsug7c6ERH516GHHfrw8AQKe1pcUC?usp=sharing)
@@ -22,14 +24,15 @@ Collaborators:
 
 ## **CHANGELOG**
 
+**[7/10/2024]**
+
+- Created seperate workspaces
+- Start on full tutorial
+- Started Bill of Materials
+- Added GitHub rules
+
 **[1/10/2024]**
 
 - Complete module draft.
 - Explore the topic & evaluate feasibility.
 - Scout for potential collaborators & trainers.
-
-**[7/10/2024]**
-
-- Start on full tutorial
-- Started Bill of Materials
-- Added GitHub rules
