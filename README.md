@@ -33,5 +33,3 @@ Collaborators:
 - Start on full tutorial
 - Started Bill of Materials
 - Added GitHub rules
-
-testing
