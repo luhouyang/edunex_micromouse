@@ -1,0 +1,21 @@
+Agenda
+1. IEEE Micromouse module progress
+2. Follow setup steps in Google Colab
+3. Delegate task:
+	Valiant - DFS (Depth First Search Algorithm) - https://www.geeksforgeeks.org/depth-first-search-or-dfs-for-a-graph/
+	Jayden - BFS (Breadth First Search) - https://www.geeksforgeeks.org/breadth-first-search-or-bfs-for-a-graph/
+	Alden - New Maze for BFS/DFS - https://github.com/mackorone/mms
+
+Task objective:
+1. Learn about each algorithm (The steps in the algorithm, how to implement in Python, draw/visualize the algorithm, create a short explanation that a form 3 student can understand)
+2. Create mazes that are optimized for each algorithm (1 maze that has the shortest path if using DFS, and 1 for BFS)
+
+Do's:
+1. Read up on materials online. Plat forms such as Medium, Geek for Geeks, etc.
+2. Find useful diagrams and illustrations.
+3. Can find any code from GitHub, as long as you understand it. (for DFS/BFS/Creating New Mazes)
+
+Deliverables:
+1. Valiant - Explanation or Form 3 students about DFS
+2. Jayden - Explanation for Form 3 students about BFS
+3. Alden - Any Mazes with their files. Short explanation about the mazes.
