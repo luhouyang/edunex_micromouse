@@ -22,7 +22,18 @@ find your workspace in `/src/YOUR_NAME`
 
 [Google Sheet](https://docs.google.com/spreadsheets/d/1ZZu8l19GLcMKLnv5OAhw-kwXTlIrgD-ZDA4Fticfcko/edit?usp=sharing)
 
+## **Contribution Rules**
+
+1. Navigate to your own branch with `git checkout YOUR_NAME`
+
+1. `YOUR_NAME = houyang OR cj OR jayden OR valiant OR alden`
+
 ## **CHANGELOG**
+
+**[13/10/2024]**
+
+- Updated meeting notes 1 at [archive/Meeting 1.txt](/archive/Meeting%201.txt)
+- Updated push rules
 
 **[7/10/2024]**
 
