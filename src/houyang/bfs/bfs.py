@@ -2,6 +2,8 @@
 
 # initialize maze array, paths arrays, move queue
 
+# reset states
+
 # next move functions
 
 # bfs algorithm
