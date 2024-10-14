@@ -96,6 +96,7 @@ def updateCoordinates(x,y,orient):
 
 def log(string):
     sys.stderr.write("{}\n".format(string))
+    
 #done
 def updateWalls(x,y,orient,L,R,F):
     if(L and R and F):
