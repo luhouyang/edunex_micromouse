@@ -2,6 +2,8 @@
 
 # initialize maze array, paths array, move stack
 
+# reset states
+
 # next move functions
 
 # dfs algorithm
