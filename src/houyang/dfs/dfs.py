@@ -1,6 +1,10 @@
 # imports
+import API
+import sys
 
 # initialize maze array, paths array, move stack
+
+# utils
 
 # reset states
 
