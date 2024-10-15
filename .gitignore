@@ -1,0 +1,23 @@
+################################################
+#                                              #
+# add the path to any files/folders            #
+# that you want to be excluded                 #
+#                                              #
+# gentle beginers guide PLEASE READ            #
+# https://www.w3schools.com/git/git_ignore.asp #
+#                                              #
+# useful template for FUTURE:                  #
+# https://github.com/github/gitignore          #
+#                                              #
+################################################
+
+# houyang
+archive/python_to_c
+
+# cj
+
+# valiant
+
+# jayden
+
+# alden
