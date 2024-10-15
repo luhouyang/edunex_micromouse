@@ -10,9 +10,9 @@ import sys
 
 # next move functions
 
-# dfs algorithm
-
 # array/stack state functions
+
+# dfs algorithm
 
 
 # main
