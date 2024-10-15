@@ -10,9 +10,9 @@ import sys
 
 # next move functions
 
-# bfs algorithm
-
 # array/queue state functions
+
+# bfs algorithm
 
 
 # main
