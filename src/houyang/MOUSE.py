@@ -1,3 +1,14 @@
+#    General Logic & Utility Functions of a Micromouse in classes
+#
+#        1) SimulationMouse
+#              - used for mms simulation
+#
+#        2) RealMouse
+#              - used for the real mouse
+#
+#    Example code in README.md
+# ========================================================================
+
 ###########
 # imports #
 ###########
@@ -50,11 +61,11 @@ class SimulationMouse():
     # update state functions #
     ##########################
 
+    # update walls
+
     # update orientation
 
     # update coordinates
-
-    # update walls
 
     # append zero to center cells
 

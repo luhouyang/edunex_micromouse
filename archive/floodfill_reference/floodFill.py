@@ -599,11 +599,11 @@ def appendDestination(x,y):
     queue.append(x)
 
 def main():
-    x=0
-    y=0
+    # x=0
+    # y=0
     xprev=0
     yprev=0
-    orient=0
+    # orient=0
     state=0
     short= False
 
