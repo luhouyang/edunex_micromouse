@@ -139,9 +139,9 @@ def show(flood, variable):
 # check state functions #
 #########################
 
-# check if mouse can move to a cell
-
 # check for center
+
+# check if mouse can move to a cell
 
 # get (x, y) of surrounding cells
 
@@ -151,7 +151,7 @@ def show(flood, variable):
 
 
 # update walls
-def updateWalls(x, y, orientation, color='G'):
+def updateWallsFloodFill(x, y, orientation, color='G'):
     API.setColor(x, y, color)
 
     L = API.wallLeft()
@@ -167,7 +167,7 @@ def updateWalls(x, y, orientation, color='G'):
 
 # change destination of mouse
 
-# append destination
+# append destination 
 
 ##################
 # move functions #

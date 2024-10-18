@@ -12,8 +12,6 @@ Example code:
 mouse = SimulationMouse(algorithm='FLOODFILL')
 ```
 
----
-
 Parameters:
 
 1. algorithm
@@ -28,8 +26,6 @@ Example code:
 ```python
 mouse = RealMouse(algorithm='FLOODFILL')
 ```
-
----
 
 Parameters:
 
