@@ -202,7 +202,7 @@ def move():
 def main():
 
     while (True):
-        updateWalls(x, y, orientation)
+        updateWallsFloodFill(x, y, orientation)
 
         # check if at goal
         if ():
