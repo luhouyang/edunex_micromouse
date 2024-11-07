@@ -278,9 +278,17 @@ def showMaze(mx, my, history):
             else:
                 if (x % 2 == 1 and y % 2 == 1):
                     if [x, y] in h:
-                        print(Fore.GREEN + 'p', end=' ')
+                        val = str(flood[int((y-1)/2)][int((x-1)/2)])
+                        if (len(val) == 1):
+                            print(Fore.GREEN + val, end=' ')
+                        else:
+                            print(Fore.GREEN + val, end='')
                     else:
-                        print(Fore.WHITE + 'p', end=' ')
+                        val = str(flood[int((y-1)/2)][int((x-1)/2)])
+                        if (len(val) == 1):
+                            print(Fore.WHITE + val, end=' ')
+                        else:
+                            print(Fore.WHITE + val, end='')
                 else:
                     if (x == 0 or x == 32 or y == 0 or y == 32):
                         print(Fore.BLUE + '.', end=' ')
@@ -494,16 +502,16 @@ def nextMove(x, y, orientation):
     orientation = updateOrientation(orientation, turning)
 
     # call move
-    move()
+    move(next_cell)
 
     return (orientation)
 
 
 # move
-def move():
-    pass
-
+def move(next_cell):
     # call API to move
+    # API.moveForward()
+    print(f"MOVE TO: {next_cell}")
 
     # update mouse state
 
