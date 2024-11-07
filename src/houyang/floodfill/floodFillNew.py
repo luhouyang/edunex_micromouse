@@ -256,7 +256,9 @@ def show(flood, variable):
             # TODO implement code for other algorithms
             API.setText(x, y, str(flood[y][x]))
 
+
 from colorama import Fore
+
 
 # show local memory maze state
 def showMaze(mx, my, history):
@@ -295,7 +297,15 @@ def showMaze(mx, my, history):
 # check state functions #
 #########################
 
-# check for center
+
+# check for goal
+def checkGoal(x, y):
+    cell_val = flood[y][x]
+
+    if (cell_val == 0):
+        return True
+    else:
+        False
 
 
 # get (x, y) of surrounding cells
@@ -506,10 +516,6 @@ def move():
 
 # floodfill algorithm
 
-# path inverser
-
-# shortest path
-
 ########
 # main #
 ########
@@ -532,6 +538,8 @@ def main():
     yprev = 0
 
     # state of the mouse, tracks the path finding progress
+    # 0, 1, 2, 3 for each corner
+    # 5, 6, 7 for going to goal, going to start, switch to short path
     state = 0
 
     # flag to switch to shortest path mode
@@ -545,7 +553,7 @@ def main():
         2- South
         3- West 
     '''
-    ORIENTATION = 0
+    orientation = 0
 
     # direction of movement for mouse, can be 'F', 'L', 'R' or 'B'
     move_direction = 'F'
@@ -569,13 +577,13 @@ def main():
         print(getSurround(X, Y))
         print(isAccessible(X, Y))
         showMaze(X, Y, history)
-        ORIENTATION = nextMove(X, Y, ORIENTATION)
+        orientation = nextMove(X, Y, orientation)
 
     # while (True):
-    #     updateWallsFloodFill(x, y, orientation)
+    #     updateWallsFloodFill(X, Y, orientation)
 
     #     # check if at goal
-    #     if ():
+    #     if (checkGoal(X, Y)):
     #         pass
 
     #         # inverse path from center to start
@@ -583,7 +591,6 @@ def main():
     #         # follow shortest path
 
     #     else:
-    #         pass
 
     #         # assign value in current cell
 
