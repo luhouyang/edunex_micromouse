@@ -7,8 +7,9 @@
 import sys
 # caution: path[0] is reserved for script path (or '' in REPL)
 # replace 'houyang' with your name space
-sys.path.insert(
-    1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
+sys.path.insert(1, '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang')
+# sys.path.insert(
+# 1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
 
 import API
 import sys
@@ -103,6 +104,19 @@ def showMaze(mx, my, orientation, history, wall_position, flood):
                     else:
                         print(Fore.WHITE + '|', end=' ')
         print(Fore.WHITE + '')
+
+
+# load maze from file
+def loadMazeFromFile():
+    pass
+
+    # read file
+
+    # sind width & length
+
+    # create empty maze based on width & height
+
+    # insert walls at correct positions
 
 
 #########################
@@ -571,6 +585,9 @@ def main():
              [13, 12, 11, 10, 9, 8, 7, 6, 6, 7, 8, 9, 10, 11, 12, 13],
              [14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14]]
 
+    # load maze from file
+    maze = loadMazeFromFile()
+    
     # the mouse's current (x, y) position in the maze
     X = 0
     Y = 0
