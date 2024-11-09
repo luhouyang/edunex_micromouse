@@ -105,6 +105,17 @@ def showMaze(mx, my, orientation, history, wall_position, flood):
         print(Fore.WHITE + '')
 
 
+# unpack map txt file to map array
+def createMazeFromFile():
+    pass
+
+    # read file contents
+
+    # initialize padded array
+
+    # parse file & insert walls
+
+
 #########################
 # check state functions #
 #########################
@@ -645,4 +656,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-# %%
+#%%
