@@ -587,7 +587,7 @@ def main():
 
     # load maze from file
     maze = loadMazeFromFile()
-    
+
     # the mouse's current (x, y) position in the maze
     X = 0
     Y = 0
@@ -662,4 +662,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-# %%
+#%%
