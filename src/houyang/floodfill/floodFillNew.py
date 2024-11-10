@@ -83,14 +83,15 @@ def showMaze(mx, my, orientation, history, wall_position, flood):
                         val = str(flood[maze_height - int((y - 1) / 2) -
                                         1][int((x - 1) / 2)])
                         if (len(val) == 1):
-                            print(Fore.GREEN + val, end=' ')
+                            print(Fore.GREEN + val, end='')
+                            print(Fore.WHITE + '-', end='')
                         else:
                             print(Fore.GREEN + val, end='')
                     else:
                         val = str(flood[maze_height - int((y - 1) / 2) -
                                         1][int((x - 1) / 2)])
                         if (len(val) == 1):
-                            print(Fore.WHITE + val, end=' ')
+                            print(Fore.WHITE + val, end='-')
                         else:
                             print(Fore.WHITE + val, end='')
                 else:
@@ -100,23 +101,52 @@ def showMaze(mx, my, orientation, history, wall_position, flood):
                     elif (x % 2 == 0 and y % 2 == 0):
                         print(Fore.WHITE + ' ', end=' ')
                     elif (x % 2 == 0 and y % 2 == 1):
-                        print(Fore.WHITE + '_', end=' ')
+                        print(Fore.WHITE + '--', end='')
                     else:
                         print(Fore.WHITE + '|', end=' ')
         print(Fore.WHITE + '')
 
 
 # load maze from file
-def loadMazeFromFile():
-    pass
+def loadMazeFromFile(path):
+    MAZE_X = 5
+    MAZE_Y = 3
 
-    # read file
+    rows = []
 
-    # sind width & length
+    with open(path, 'r') as file:
+        for line in file:
+            rows.append(line)
 
-    # create empty maze based on width & height
+    file_width = len(rows[0])
+    file_height = len(rows)
 
-    # insert walls at correct positions
+    maze_width = int((file_width - 2) / 4)
+    maze_height = int((file_height - 1) / 2)
+
+    wall_width = maze_width * 2 + 1
+    wall_height = maze_height * 2 + 1
+
+    maze = [[0] * wall_width for _ in range(wall_height)]
+
+    for y in range(maze_height):
+        for x in range(maze_width):
+            x_dist = x * 4
+            y_dist = y * 2
+
+            if (rows[y_dist][x_dist + 2] != ' '):
+                maze[y * 2][x * 2 + 1] = 1
+
+            if (rows[y_dist + 2][x_dist + 2] != ' '):
+                maze[(y + 1) * 2][x * 2 + 1] = 1
+
+            if (rows[y_dist + 1][x_dist] != ' '):
+                maze[y * 2 + 1][x * 2] = 1
+
+            if (rows[y_dist + 1][x_dist + 4] != ' '):
+                maze[y * 2 + 1][(x + 1) * 2] = 1
+
+    return maze
 
 
 #########################
@@ -564,7 +594,7 @@ def main():
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ]]
 
@@ -586,7 +616,9 @@ def main():
              [14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14]]
 
     # load maze from file
-    maze = loadMazeFromFile()
+    maze = loadMazeFromFile(
+        '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    )
 
     # the mouse's current (x, y) position in the maze
     X = 0
@@ -633,6 +665,8 @@ def main():
 
         # check if at goal
         if (checkGoal(X, Y, flood)):
+            showMaze(X, Y, orientation, history, maze, flood)
+
             print("DONE!")
             break
 
@@ -641,11 +675,14 @@ def main():
             # follow shortest path
 
         else:
+            flood = floodFill(flood, maze)
+
             history.append([X, Y])
-            showMaze(X, Y, orientation, history, wall_position, flood)
-            orientation, X, Y = nextMove(X, Y, orientation, wall_position,
-                                         flood)
-            flood = floodFill(flood, wall_position)
+
+            showMaze(X, Y, orientation, history, maze, flood)
+
+            orientation, X, Y = nextMove(X, Y, orientation, maze, flood)
+
             print()
 
             # assign value in current cell
