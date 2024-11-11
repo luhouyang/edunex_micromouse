@@ -7,9 +7,9 @@
 import sys
 # caution: path[0] is reserved for script path (or '' in REPL)
 # replace 'houyang' with your name space
-sys.path.insert(1, '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang')
-# sys.path.insert(
-# 1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
+# sys.path.insert(1, '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang')
+sys.path.insert(
+    1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
 
 import API
 import sys
@@ -39,18 +39,78 @@ def reset():
 
 
 # show info on simulator
-def show(flood, variable):
+def show(flood):
     for x in range(16):
         for y in range(16):
             # TODO implement code for other algorithms
             API.setText(x, y, str(flood[y][x]))
 
 
-from colorama import Fore
+# from colorama import Fore
+
+# # show local memory maze state
+# def showMaze(mx, my, orientation, history, wall_position, flood):
+#     wall_width = len(wall_position[0])
+#     wall_height = len(wall_position)
+
+#     maze_width = len(flood[0])
+#     maze_height = len(flood)
+
+#     mx = mx * 2 + 1
+#     my = wall_height - (my * 2 + 1) - 1
+
+#     h = []
+#     for cell in history:
+#         h.append([cell[0] * 2 + 1, wall_height - (cell[1] * 2 + 1) - 1])
+
+#     for (y) in range(wall_height):
+#         for (x) in range(wall_width):
+#             if (wall_position[y][x] == 1):
+#                 # print(Fore.RED + '##', end='')
+#                 print(Fore.LIGHTBLACK_EX + '##', end='')
+#             elif (mx == x and my == y):
+#                 if (orientation == 0):
+#                     print(Fore.CYAN + 'N', end=' ')
+#                 elif (orientation == 1):
+#                     print(Fore.CYAN + 'E', end=' ')
+#                 elif (orientation == 2):
+#                     print(Fore.CYAN + 'S', end=' ')
+#                 else:
+#                     print(Fore.CYAN + 'W', end=' ')
+#             else:
+#                 if (x % 2 == 1 and y % 2 == 1):
+#                     if [x, y] in h:
+#                         val = str(flood[maze_height - int((y - 1) / 2) -
+#                                         1][int((x - 1) / 2)])
+#                         if (len(val) == 1):
+#                             print(Fore.GREEN + val, end='')
+#                             print(Fore.WHITE + '-', end='')
+#                         else:
+#                             print(Fore.GREEN + val, end='')
+#                     else:
+#                         val = str(flood[maze_height - int((y - 1) / 2) -
+#                                         1][int((x - 1) / 2)])
+#                         if (len(val) == 1):
+#                             print(Fore.WHITE + val, end='-')
+#                         else:
+#                             print(Fore.WHITE + val, end='')
+#                 else:
+#                     if (x == 0 or x == wall_width - 1 or y == 0
+#                             or y == wall_height - 1):
+#                         # print(Fore.BLUE + '.', end=' ')
+#                         # print(Fore.RED + '##', end='')
+#                         print(Fore.LIGHTBLACK_EX + '##', end='')
+#                     elif (x % 2 == 0 and y % 2 == 0):
+#                         print(Fore.WHITE + ' ', end=' ')
+#                     elif (x % 2 == 0 and y % 2 == 1):
+#                         print(Fore.WHITE + '--', end='')
+#                     else:
+#                         print(Fore.WHITE + '|', end=' ')
+#         print(Fore.WHITE + '')
 
 
 # show local memory maze state
-def showMaze(mx, my, orientation, history, wall_position, flood):
+def showMazeQT(mx, my, orientation, history, wall_position, flood):
     wall_width = len(wall_position[0])
     wall_height = len(wall_position)
 
@@ -65,46 +125,85 @@ def showMaze(mx, my, orientation, history, wall_position, flood):
         h.append([cell[0] * 2 + 1, wall_height - (cell[1] * 2 + 1) - 1])
 
     for (y) in range(wall_height):
+        line = ''
         for (x) in range(wall_width):
             if (wall_position[y][x] == 1):
-                print(Fore.RED + 'X', end=' ')
+                line += '##'
             elif (mx == x and my == y):
                 if (orientation == 0):
-                    print(Fore.CYAN + 'N', end=' ')
+                    line += 'N '
                 elif (orientation == 1):
-                    print(Fore.CYAN + 'E', end=' ')
+                    line += 'E '
                 elif (orientation == 2):
-                    print(Fore.CYAN + 'S', end=' ')
+                    line += 'S '
                 else:
-                    print(Fore.CYAN + 'W', end=' ')
+                    line += 'W '
             else:
                 if (x % 2 == 1 and y % 2 == 1):
                     if [x, y] in h:
                         val = str(flood[maze_height - int((y - 1) / 2) -
                                         1][int((x - 1) / 2)])
                         if (len(val) == 1):
-                            print(Fore.GREEN + val, end='')
-                            print(Fore.WHITE + '-', end='')
+                            line += val + '-'
                         else:
-                            print(Fore.GREEN + val, end='')
+                            line += val
                     else:
                         val = str(flood[maze_height - int((y - 1) / 2) -
                                         1][int((x - 1) / 2)])
                         if (len(val) == 1):
-                            print(Fore.WHITE + val, end='-')
+                            line += val + '-'
                         else:
-                            print(Fore.WHITE + val, end='')
+                            line += val
                 else:
                     if (x == 0 or x == wall_width - 1 or y == 0
                             or y == wall_height - 1):
-                        print(Fore.BLUE + '.', end=' ')
+                        line += '##'
                     elif (x % 2 == 0 and y % 2 == 0):
-                        print(Fore.WHITE + ' ', end=' ')
+                        line += '  '
                     elif (x % 2 == 0 and y % 2 == 1):
-                        print(Fore.WHITE + '--', end='')
+                        line += '--'
                     else:
-                        print(Fore.WHITE + '|', end=' ')
-        print(Fore.WHITE + '')
+                        line += '| '
+        log(line)
+        log('\n')
+
+
+def predictPath(wall_position, flood, shortest_path, history):
+    x = 0
+    y = 0
+    
+    cell_val = flood[y][x]
+
+    recolor_cells_green = [cell for cell in shortest_path if cell in history]
+    recolor_cells_colorless = [cell for cell in shortest_path if cell not in recolor_cells_green]
+
+    for cell in recolor_cells_green:
+        API.setColor(cell[0], cell[1], 'G')
+
+    for cell in recolor_cells_colorless:
+        API.clearColor(cell[0], cell[1])
+
+    shortest_path = []
+
+    while (cell_val != 0):
+        # get accessible cells
+        accessible_cells = isAccessible(x, y, wall_position, flood)
+
+        # compare adjacent cell values with current cell_val
+        for cell in accessible_cells:
+            adj_val = flood[cell[1]][cell[0]]
+
+            if (cell_val - 1 == adj_val):
+                shortest_path.append(cell)
+                x = cell[0]
+                y = cell[1]
+                cell_val -= 1
+                break
+
+    for cell in shortest_path:
+        API.setColor(cell[0], cell[1], 'a')
+
+    return shortest_path
 
 
 # load maze from file
@@ -254,14 +353,79 @@ def isAccessible(x, y, wall_position, flood):
 
 
 # update walls
-def updateWallsFloodFill(x, y, orientation, color='G'):
+def updateWallsFloodFill(x, y, orientation, flood, wall_position, color='G'):
     API.setColor(x, y, color)
 
     L = API.wallLeft()
     R = API.wallRight()
     F = API.wallFront()
 
+    surrounding_cells, remaining_cell_index = getSurround(x, y, flood)
+
+    if (orientation == 0):
+        N = F
+        E = R
+        S = False
+        W = L
+    elif (orientation == 1):
+        N = L
+        E = F
+        S = R
+        W = False
+    elif (orientation == 2):
+        N = False
+        E = L
+        S = F
+        W = R
+    else:
+        N = R
+        E = False
+        S = L
+        W = F
+
+    if (N):
+        API.setWall(x, y, 'n')
+    if (E):
+        API.setWall(x, y, 'e')
+    if (S):
+        API.setWall(x, y, 's')
+    if (W):
+        API.setWall(x, y, 'w')
+
+    walls_between = []
+    for i, val in enumerate([N, E, S, W]):
+        if val:
+            if remaining_cell_index.get(i):
+                walls_between.append(remaining_cell_index.get(i))
+
     # update wall_position with walls
+    x = x * 2 + 1
+    y = y * 2 + 1
+
+    wall_arr = np.array(wall_position)
+    wall_width = wall_arr.shape[1] - 1
+    wall_height = wall_arr.shape[0] - 1
+
+    for cell in walls_between:
+        temp = [cell[0] * 2 + 1, cell[1] * 2 + 1]
+        '''
+        find difference between surrounding cell and position for the axis that is different
+        the difference will be equal to the wall index in between the cells
+        example: for (3, 1) & (1, 1) minus the 'x' axis = (2, 1)
+        because 'y' is the same for both
+        '''
+
+        if (temp[0] == x):
+            wall_cell = [temp[0], int((temp[1] + y) / 2)]
+        else:
+            wall_cell = [int((temp[0] + x) / 2), temp[1]]
+        '''
+        reverse indexing for height, y, first dimension of the array
+        '''
+        wall_position[wall_height - wall_cell[1]][wall_cell[0]] = 1
+
+    # return updated wall positions
+    return wall_position
 
 
 # update orientation
@@ -288,13 +452,7 @@ def updateOrientation(orientation, turn):
     return (orientation)
 
 
-# update coordinates
-
-# append zero to center cells
-
 # change destination of mouse
-
-# append destination
 
 ##################
 # move functions #
@@ -333,20 +491,20 @@ def nextMove(x, y, orientation, wall_position, flood):
     ][0]
 
     if (orientation == next_key):
-        print("NO NEED TO TURN")
+        # print("NO NEED TO TURN")
         turning = 'F'
     elif ((orientation + 1) % 4 == next_key):
-        # API.turnRight()
-        print("TURN RIGHT")
+        API.turnRight()
+        # print("TURN RIGHT")
         turning = 'R'
     elif ((orientation - 1) % 4 == next_key):
-        # API.turnLeft()
-        print("TURN LEFT")
+        API.turnLeft()
+        # print("TURN LEFT")
         turning = 'L'
     else:
-        # API.turnLeft()
-        # API.turnLeft()
-        print("TURN BACK")
+        API.turnLeft()
+        API.turnLeft()
+        # print("TURN BACK")
         turning = 'B'
 
     orientation == next_key
@@ -363,8 +521,8 @@ def nextMove(x, y, orientation, wall_position, flood):
 # move
 def move(next_cell):
     # call API to move
-    # API.moveForward()
-    print(f"MOVE TO: {next_cell}")
+    API.moveForward()
+    # print(f"MOVE TO: {next_cell}")
 
     # update mouse state
 
@@ -388,10 +546,16 @@ def floodFill(flood, wall_position):
 
     flood_zero = [[-1] * width for _ in range(height)]
 
-    for y in range(int(height / 2) - 1, int(height / 2) + 1):
-        for x in range(int(width / 2) - 1, int(width / 2) + 1):
-            queue.append([x, y])
-            flood_zero[y][x] = 0
+    for y in range(height):
+        for x in range(width):
+            if (flood[y][x] == 0):
+                queue.append([x, y])
+                flood_zero[y][x] = 0
+
+    # for y in range(int(height / 2) - 1, int(height / 2) + 1):
+    #     for x in range(int(width / 2) - 1, int(width / 2) + 1):
+    #         queue.append([x, y])
+    #         flood_zero[y][x] = 0
 
     while (len(queue) != 0):
         x, y = queue.pop(0)
@@ -562,7 +726,7 @@ def main():
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
@@ -570,31 +734,31 @@ def main():
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ],
                      [
-                         0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                      ]]
 
@@ -616,8 +780,11 @@ def main():
              [14, 13, 12, 11, 10, 9, 8, 7, 7, 8, 9, 10, 11, 12, 13, 14]]
 
     # load maze from file
+    # maze = loadMazeFromFile(
+    #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    # )
     maze = loadMazeFromFile(
-        '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+        'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     )
 
     # the mouse's current (x, y) position in the maze
@@ -660,40 +827,83 @@ def main():
 
     history = []
 
+    width = len(flood[0])
+    height = len(flood)
+
     while (True):
-        # updateWallsFloodFill(X, Y, orientation)
+        wall_position = updateWallsFloodFill(X, Y, orientation, flood,
+                                             wall_position)
 
         # check if at goal
         if (checkGoal(X, Y, flood)):
-            showMaze(X, Y, orientation, history, maze, flood)
+            # showMaze(X, Y, orientation, history, wall_position, flood)
+            # showMazeQT(X, Y, orientation, history, wall_position, flood)
 
-            print("DONE!")
-            break
+            if (state == 0):
+                # to lower right corner
+                flood[0][width - 1] = 0
+                for y in range(int(height / 2) - 1, int(height / 2) + 1):
+                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                        flood[y][x] = 1000
+            elif (state == 1):
+                # to center
+                flood[0][width - 1] = 1000
+                for y in range(int(height / 2) - 1, int(height / 2) + 1):
+                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                        flood[y][x] = 0
+            elif (state == 2):
+                # to upper right corner
+                flood[height - 1][0] = 0
+                for y in range(int(height / 2) - 1, int(height / 2) + 1):
+                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                        flood[y][x] = 1000
+            elif (state == 3):
+                # to center
+                flood[height - 1][0] = 1000
+                for y in range(int(height / 2) - 1, int(height / 2) + 1):
+                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                        flood[y][x] = 0
+            elif (state == 4):
+                # to upper left corner
+                flood[height - 1][width - 1] = 0
+                for y in range(int(height / 2) - 1, int(height / 2) + 1):
+                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                        flood[y][x] = 1000
+            elif (state == 5):
+                # to starting position
+                flood[0][0] = 0
+                flood[height - 1][width - 1] = 1000
+            elif (state == 6):
+                # shortest path
+                flood[0][0] = 1000
+                for y in range(int(height / 2) - 1, int(height / 2) + 1):
+                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                        flood[y][x] = 0
+            else:
+                break
+
+            state += 1
+            API.clearAllColor()
+            history = []
 
             # inverse path from center to start
 
             # follow shortest path
 
         else:
-            flood = floodFill(flood, maze)
+            flood = floodFill(flood, wall_position)
 
             history.append([X, Y])
 
-            showMaze(X, Y, orientation, history, maze, flood)
+            # showMaze(X, Y, orientation, history, wall_position, flood)
+            # showMazeQT(X, Y, orientation, history, wall_position, flood)
+            show(flood)
+            shortest_path = predictPath(wall_position, flood, shortest_path, history)
 
-            orientation, X, Y = nextMove(X, Y, orientation, maze, flood)
+            orientation, X, Y = nextMove(X, Y, orientation, wall_position,
+                                         flood)
 
-            print()
-
-            # assign value in current cell
-
-            # look for next reachable cell with lowest value
-
-            # update flood fill array
-
-            # change orientation
-
-            # move forward
+            # print()
 
 
 if __name__ == '__main__':
