@@ -12,10 +12,7 @@ sys.path.insert(
     1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
 
 import API
-import sys
 import numpy as np
-
-from MOUSE import SimulationMouse, RealMouse
 
 #########
 # utils #
