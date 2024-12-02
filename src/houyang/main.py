@@ -1,73 +1,82 @@
 # %%
-
-# from MOUSE import ConsoleMouse
-
-# def main():
-#     #######################
-#     # initialize variable #
-#     #######################
-
-#     mouse = ConsoleMouse()
-
-#     width = 16
-#     height = 16
-
-#     wall_position = mouse.get_empty_wall_position(width * 2 + 1,
-#                                                   height * 2 + 1)
-
-#     flood = mouse.get_initial_flood(width, height, wall_position)
-
-#     # load maze from file
-#     # maze = loadMazeFromFile(
-#     #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
-#     # )
-#     maze = mouse.load_maze_from_file(
-#         'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
-#     )
-#     wall_position = maze
-
-#     X = 0
-#     Y = 0
-
-#     # the mouse's orientation
-#     '''
-#     orients :
-#         0- North
-#         1- East
-#         2- South
-#         3- West
-#     '''
-#     orientation = 0
-
-#     ###################
-#     # Micromouse Code #
-#     ###################
-
-#     history = []
-
-#     while (True):
-#         # check if at goal
-#         if (mouse.check_goal(X, Y, flood)):
-#             history = []
-#             break
-
-#         else:
-#             flood = mouse.floodfill_algorithm(flood, wall_position)
-
-#             history.append([X, Y])
-
-#             mouse.show_maze(X, Y, orientation, history, wall_position, flood)
-
-#             orientation, X, Y = mouse.next_move(X, Y, orientation,
-#                                                 wall_position, flood)
-
-#             print()
-
-import API
-from MOUSE_MMS import SimulationMouse
+"""
+Below if for running in Console
+"""
 
 
-def main():
+def mainConsole():
+    from MOUSE import ConsoleMouse
+
+    #######################
+    # initialize variable #
+    #######################
+
+    mouse = ConsoleMouse()
+
+    width = 16
+    height = 16
+
+    wall_position = mouse.get_empty_wall_position(width * 2 + 1,
+                                                  height * 2 + 1)
+
+    flood = mouse.get_initial_flood(width, height, wall_position)
+
+    # load maze from file
+    # maze = loadMazeFromFile(
+    #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    # )
+    maze = mouse.load_maze_from_file(
+        'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    )
+    wall_position = maze
+
+    X = 0
+    Y = 0
+
+    # the mouse's orientation
+    '''
+    orients :
+        0- North
+        1- East
+        2- South
+        3- West
+    '''
+    orientation = 0
+
+    ###################
+    # Micromouse Code #
+    ###################
+
+    history = []
+
+    while (True):
+        # check if at goal
+        if (mouse.check_goal(X, Y, flood)):
+            history = []
+            break
+
+        else:
+            flood = mouse.floodfill_algorithm(flood, wall_position)
+
+            history.append([X, Y])
+
+            mouse.show_maze(X, Y, orientation, history, wall_position, flood)
+
+            orientation, X, Y = mouse.next_move(X, Y, orientation,
+                                                wall_position, flood)
+
+            print()
+
+
+"""
+Below if for running in QT
+"""
+
+
+def mainQT():
+    import API
+    from MOUSE_MMS import SimulationMouse
+
     #######################
     # initialize variable #
     #######################
@@ -114,7 +123,6 @@ def main():
 
         # check if at goal
         if (mouse.check_goal(X, Y, flood)):
-            # showMaze(X, Y, orientation, history, wall_position, flood)
             # showMazeQT(X, Y, orientation, history, wall_position, flood)
 
             if (state == 0):
@@ -145,10 +153,6 @@ def main():
             API.clearAllColor()
             history = []
 
-            # inverse path from center to start
-
-            # follow shortest path
-
         else:
             flood = mouse.floodfill_algorithm(flood, wall_position)
 
@@ -163,5 +167,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    mainConsole()
+    # mainQT()
 # %%
