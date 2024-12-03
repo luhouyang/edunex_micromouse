@@ -11,7 +11,7 @@ def mainConsole():
     # initialize variable #
     #######################
 
-    mouse = ConsoleMouse()
+    mouse = ConsoleMouse(algorithm='FLOODFILL')
 
     width = 16
     height = 16
@@ -62,8 +62,8 @@ def mainConsole():
 
             mouse.show_maze(X, Y, orientation, history, wall_position, flood)
 
-            orientation, X, Y = mouse.next_move(X, Y, orientation,
-                                                wall_position, flood)
+            orientation, X, Y = mouse.next_move_flood_fill(
+                X, Y, orientation, wall_position, flood)
 
             print()
 
@@ -81,7 +81,7 @@ def mainQT():
     # initialize variable #
     #######################
 
-    mouse = SimulationMouse()
+    mouse = SimulationMouse(algorithm='FLOODFILL')
 
     width = 16
     height = 16
@@ -162,11 +162,11 @@ def mainQT():
             shortest_path = mouse.predict_path_floodfill(
                 X, Y, wall_position, flood, shortest_path, history)
 
-            orientation, X, Y = mouse.next_move(X, Y, orientation,
-                                                wall_position, flood)
+            orientation, X, Y = mouse.next_move_flood_fill(
+                X, Y, orientation, wall_position, flood)
 
 
 if __name__ == '__main__':
-    mainConsole()
-    # mainQT()
+    # mainConsole()
+    mainQT()
 # %%

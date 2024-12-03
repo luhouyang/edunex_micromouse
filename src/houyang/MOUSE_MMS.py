@@ -228,7 +228,7 @@ class SimulationMouse():
             False
 
     # get (x, y) of surrounding cells
-    def get_surround(self, x, y, flood):
+    def get_surround(self, x, y, maze_state):
         surrounding_cells = []
 
         surrounding_cells.append([x, y + 1])  # north
@@ -238,8 +238,8 @@ class SimulationMouse():
 
         removed_cells = [
             cell for cell in surrounding_cells
-            if (cell[0] < 0 or cell[0] > len(flood[0]) -
-                1 or cell[1] < 0 or cell[1] > len(flood) - 1)
+            if (cell[0] < 0 or cell[0] > len(maze_state[0]) -
+                1 or cell[1] < 0 or cell[1] > len(maze_state) - 1)
         ]
 
         remaining_cell_index = {
@@ -255,9 +255,9 @@ class SimulationMouse():
         return surrounding_cells, remaining_cell_index
 
     # check if mouse can move to a cell
-    def is_accessible(self, x, y, wall_position, flood):
+    def is_accessible(self, x, y, wall_position, maze_state):
         # get surrounding cells
-        surrounding_cells, _ = self.get_surround(x, y, flood)
+        surrounding_cells, _ = self.get_surround(x, y, maze_state)
 
         # check with wall_position
         '''
@@ -309,7 +309,7 @@ class SimulationMouse():
                                x,
                                y,
                                orientation,
-                               flood,
+                               maze_state,
                                wall_position,
                                color='G'):
         API.setColor(x, y, color)
@@ -319,7 +319,7 @@ class SimulationMouse():
         F = API.wallFront()
 
         surrounding_cells, remaining_cell_index = self.get_surround(
-            x, y, flood)
+            x, y, maze_state)
 
         if (orientation == 0):
             N = F
@@ -417,7 +417,7 @@ class SimulationMouse():
         # reset all squares
         for y in range(height):
             for x in range(width):
-                flood[y][x] = 1000
+                flood[y][x] = -1
 
         if (preset == 'center'):
             for y in range(int(height / 2) - 1, int(height / 2) + 1):
@@ -441,7 +441,7 @@ class SimulationMouse():
     ##################
 
     # next move functions
-    def next_move(self, x, y, orientation, wall_position, flood):
+    def next_move_flood_fill(self, x, y, orientation, wall_position, flood):
         cell_val = flood[y][x]
 
         # get surrounding cells

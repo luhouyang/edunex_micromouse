@@ -219,8 +219,8 @@ class ConsoleMouse():
     #########################
 
     # check for goal
-    def check_goal(self, x, y, flood):
-        cell_val = flood[y][x]
+    def check_goal(self, x, y, maze_state):
+        cell_val = maze_state[y][x]
 
         if (cell_val == 0):
             return True
@@ -228,7 +228,7 @@ class ConsoleMouse():
             False
 
     # get (x, y) of surrounding cells
-    def get_surround(self, x, y, flood):
+    def get_surround(self, x, y, maze_state):
         surrounding_cells = []
 
         surrounding_cells.append([x, y + 1])  # north
@@ -238,8 +238,8 @@ class ConsoleMouse():
 
         removed_cells = [
             cell for cell in surrounding_cells
-            if (cell[0] < 0 or cell[0] > len(flood[0]) -
-                1 or cell[1] < 0 or cell[1] > len(flood) - 1)
+            if (cell[0] < 0 or cell[0] > len(maze_state[0]) -
+                1 or cell[1] < 0 or cell[1] > len(maze_state) - 1)
         ]
 
         remaining_cell_index = {
@@ -255,9 +255,9 @@ class ConsoleMouse():
         return surrounding_cells, remaining_cell_index
 
     # check if mouse can move to a cell
-    def is_accessible(self, x, y, wall_position, flood):
+    def is_accessible(self, x, y, wall_position, maze_state):
         # get surrounding cells
-        surrounding_cells, _ = self.get_surround(x, y, flood)
+        surrounding_cells, _ = self.get_surround(x, y, maze_state)
 
         # check with wall_position
         '''
@@ -328,38 +328,38 @@ class ConsoleMouse():
         return (orientation)
 
     # set goal
-    def set_goal(self, flood, preset='center', cx=0, cy=0):
-        height = len(flood)
-        width = len(flood[0])
+    def set_goal(self, maze_state, preset='center', cx=0, cy=0):
+        height = len(maze_state)
+        width = len(maze_state[0])
 
         # reset all squares
         for y in range(height):
             for x in range(width):
-                flood[y][x] = 1000
+                maze_state[y][x] = -1
 
         if (preset == 'center'):
             for y in range(int(height / 2) - 1, int(height / 2) + 1):
                 for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                    flood[y][x] = 0
+                    maze_state[y][x] = 0
         elif (preset == 'topleft'):
-            flood[height - 1][width - 1] = 0
+            maze_state[height - 1][width - 1] = 0
         elif (preset == 'topright'):
-            flood[height - 1][0] = 0
+            maze_state[height - 1][0] = 0
         elif (preset == 'bottomleft'):
-            flood[0][0] = 0
+            maze_state[0][0] = 0
         elif (preset == 'bottomright'):
-            flood[0][width - 1] = 0
+            maze_state[0][width - 1] = 0
         elif (preset == 'custom'):
-            flood[cy][cx] = 0
+            maze_state[cy][cx] = 0
 
-        return flood
+        return maze_state
 
     ##################
     # move functions #
     ##################
 
     # next move functions
-    def next_move(self, x, y, orientation, wall_position, flood):
+    def next_move_flood_fill(self, x, y, orientation, wall_position, flood):
         cell_val = flood[y][x]
 
         # get surrounding cells
