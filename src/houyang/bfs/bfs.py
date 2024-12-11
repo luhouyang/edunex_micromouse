@@ -45,7 +45,6 @@ def show(flood):
 
 # from colorama import Fore
 
-
 # # show local memory maze state
 # def showMaze(mx, my, orientation, history, wall_position, flood):
 #     wall_width = len(wall_position[0])
@@ -255,20 +254,11 @@ def getEmptyWallPosition(width, height):
 
 
 # generate boolean maze_state
-# def get_initial_maze_state(width, height):
-#     maze_state = [[-1] * width for _ in range(height)]
-
-#     for y in range(int(height / 2) - 1, int(height / 2) + 1):
-#         for x in range(int(width / 2) - 1, int(width / 2) + 1):
-#             maze_state[y][x] = 0
-
-
-#     return maze_state
-def get_initial_maze_state(width, height):
+def get_initial_maze_state_bfs(width, height):
     maze_state = [[-1] * width for _ in range(height)]
 
-    for y in range(int(height / 2) - 1, int(height / 2)):
-        for x in range(int(width / 2) - 1, int(width / 2)):
+    for y in range(int(height / 2) - 1, int(height / 2) + 1):
+        for x in range(int(width / 2) - 1, int(width / 2) + 1):
             maze_state[y][x] = 0
 
     return maze_state
@@ -697,8 +687,98 @@ def move(next_cell):
 
 
 # inverse path
-def inversePath(path):
-    pass
+def inverse_path(path):
+    inv = []
+
+    for i in range(0, len(path) - 1):
+        inv.insert(0, path[i])
+
+    inv.append([0, 0])
+
+    return inv
+
+
+def shortest_path(x, y, cell_parent_map, wall_position, maze_state):
+
+    next_cell = [x, y]
+
+    shortest = [next_cell]
+
+    while (True):
+        if ((next_cell[0], next_cell[1]) == (0, 0)):
+            break
+
+        next_cell = cell_parent_map[(next_cell[0], next_cell[1])]
+
+        # get accessible cells
+        accessible_cells = isAccessible(0, 0, wall_position, maze_state)
+
+        shortest.insert(0, next_cell)
+        if (next_cell in accessible_cells):
+            # shortest.append([x, y])
+            break
+
+    return shortest
+
+
+def move_shortest(x, y, orientation, path, maze_state, wall_position):
+    history = [[x, y]]
+
+    while (len(path) > 0):
+        wall_position = updateWallsFloodFill(x, y, orientation, maze_state,
+                                             wall_position)
+
+        next_cell = path.pop(0)
+
+        # get surrounding cells
+        surrounding_cells, remaining_cell_index = getSurround(x, y, maze_state)
+
+        # get turn orientation
+        '''
+        orients :
+            0- North
+            1- East
+            2- South
+            3- West
+        '''
+        turning = 'F'
+        next_key = [
+            key for key, val in remaining_cell_index.items()
+            if val == next_cell
+        ][0]
+
+        if (orientation == next_key):
+            # print("NO NEED TO TURN")
+            turning = 'F'
+        elif ((orientation + 1) % 4 == next_key):
+            API.turnRight()
+            # print("TURN RIGHT")
+            turning = 'R'
+        elif ((orientation - 1) % 4 == next_key):
+            API.turnLeft()
+            # print("TURN LEFT")
+            turning = 'L'
+        else:
+            API.turnLeft()
+            API.turnLeft()
+            # print("TURN BACK")
+            turning = 'B'
+
+        orientation == next_key
+
+        # call updateOrientation
+        orientation = updateOrientation(orientation, turning)
+
+        # call move
+        move(next_cell)
+
+        x, y = next_cell
+
+        history.append(next_cell)
+
+        # showMaze(x, y, orientation, history, wall_position, maze_state)
+
+    return orientation, next_cell[0], next_cell[1]
 
 
 ########
@@ -759,7 +839,7 @@ def main():
     '''
     wall_position = getEmptyWallPosition(width * 2 + 1, height * 2 + 1)
 
-    maze_state = get_initial_maze_state(width, height)
+    maze_state = get_initial_maze_state_bfs(width, height)
 
     # load maze from file
     # maze = loadMazeFromFile(
@@ -796,6 +876,7 @@ def main():
 
     fifo_queue = []
     cell_parent_map = {}
+    shortest = []
 
     history = []
 
@@ -805,7 +886,7 @@ def main():
 
         # check if at goal
         if (checkGoal(X, Y, maze_state)):
-            # showMaze(X, Y, orientation, history, wall_position, flood)
+            # showMaze(X, Y, orientation, history, wall_position, maze_state)
             # showMazeQT(X, Y, orientation, history, wall_position, flood)
 
             # if (state == 0):
@@ -832,13 +913,31 @@ def main():
             # else:
             #     break
 
+            shortest = shortest_path(X, Y, cell_parent_map, wall_position,
+                                     maze_state)
+
+            inv = inverse_path(shortest)
+
+            # print(shortest, '\n', inv)
+
+            API.clearAllColor()
+
+            orientation, X, Y = move_shortest(X, Y, orientation, inv,
+                                              maze_state, wall_position)
+
+            API.clearAllColor()
+
+            orientation, X, Y = move_shortest(X, Y, orientation, shortest,
+                                              maze_state, wall_position)
+
             state += 1
             # API.clearAllColor()
-            history = []
 
             # inverse path from center to start
 
             # follow shortest path
+
+            break
 
         else:
             # flood = floodFill(flood, wall_position)

@@ -485,9 +485,9 @@ def setGoal(flood, preset='center', cx=0, cy=0):
             for x in range(int(width / 2) - 1, int(width / 2) + 1):
                 flood[y][x] = 0
     elif (preset == 'topleft'):
-        flood[height - 1][width - 1] = 0
-    elif (preset == 'topright'):
         flood[height - 1][0] = 0
+    elif (preset == 'topright'):
+        flood[height - 1][width - 1] = 0
     elif (preset == 'bottomleft'):
         flood[0][0] = 0
     elif (preset == 'bottomright'):

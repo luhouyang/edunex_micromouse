@@ -44,7 +44,6 @@ def show(flood):
 
 # from colorama import Fore
 
-
 # # show local memory maze state
 # def showMaze(mx, my, orientation, history, wall_position, flood):
 #     wall_width = len(wall_position[0])
@@ -253,19 +252,6 @@ def getEmptyWallPosition(width, height):
     return wall_position
 
 
-# # generate flood
-# def getInitialFlood(width, height, wall_position):
-#     flood_zero = [[-1] * width for _ in range(height)]
-
-#     for y in range(int(height / 2) - 1, int(height / 2) + 1):
-#         for x in range(int(width / 2) - 1, int(width / 2) + 1):
-#             flood_zero[y][x] = 0
-
-#     flood = floodFill(flood_zero, wall_position)
-
-#     return flood
-
-
 # generate boolean maze_state
 # def get_initial_maze_state(width, height):
 #     maze_state = [[-1] * width for _ in range(height)]
@@ -274,13 +260,14 @@ def getEmptyWallPosition(width, height):
 #         for x in range(int(width / 2) - 1, int(width / 2) + 1):
 #             maze_state[y][x] = 0
 
+
 #     return maze_state
-def get_initial_maze_state(width, height):
+def get_initial_maze_state_dfs(width, height):
     maze_state = [[-1] * width for _ in range(height)]
 
-    for y in range(int(height / 2) - 1, int(height / 2)):
-        for x in range(int(width / 2) - 1, int(width / 2)):
-            maze_state[y][x] = 0
+    # for y in range(int(height / 2) - 1, int(height / 2)):
+    #     for x in range(int(width / 2) - 1, int(width / 2)):
+    #         maze_state[y][x] = 0
 
     return maze_state
 
@@ -291,10 +278,8 @@ def get_initial_maze_state(width, height):
 
 
 # check for goal
-def checkGoal(x, y, maze_state):
-    cell_val = maze_state[y][x]
-
-    if (cell_val == 0):
+def check_goal_dfs(x, y, goal):
+    if ([x, y] in goal):
         return True
     else:
         False
@@ -390,7 +375,12 @@ def isAccessible(x, y, wall_position, maze_state):
 
 
 # update walls
-def updateWallsFloodFill(x, y, orientation, maze_state, wall_position, color='G'):
+def updateWallsFloodFill(x,
+                         y,
+                         orientation,
+                         maze_state,
+                         wall_position,
+                         color='G'):
     API.setColor(x, y, color)
 
     L = API.wallLeft()
@@ -586,7 +576,7 @@ def backtrace_dfs(x, y, orientation, wall_position, lifo_stack, trace_stack,
 
     x, y = trace_stack.pop(0)
 
-    while(True):
+    while (True):
         # get surrounding cells
         surrounding_cells, remaining_cell_index = getSurround(x, y, maze_state)
         # print(x, y, remaining_cell_index)
@@ -672,13 +662,7 @@ def next_move_dfs(x, y, orientation, wall_position, lifo_stack, trace_stack,
         for cell in accessible_cells:
             lifo_stack.insert(0, cell)
 
-        # for cell in lifo_stack:
-        #     if (maze_state[cell[1]][cell[0]] == -1):
-        #         next_cell = cell
-        #         trace_stack.insert(0, cell)
-        #         break
-
-        while(True):
+        while (True):
             cell = lifo_stack.pop(0)
             if (maze_state[cell[1]][cell[0]] == -1):
                 next_cell = cell
@@ -818,11 +802,11 @@ def main():
     #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     # )
     # maze = loadMazeFromFile(
-        # 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    # 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     # )
 
     # wall_position = maze
-    maze_state = get_initial_maze_state(width, height)
+    maze_state = get_initial_maze_state_dfs(width, height)
 
     # the mouse's current (x, y) position in the maze
     X = 0
@@ -852,12 +836,15 @@ def main():
 
     history = []
 
+    goal = [[width / 2 - 1, height / 2], [width / 2, height / 2],
+            [width / 2 - 1, height / 2 - 1], [width / 2, height / 2 - 1]]
+
     while (True):
         wall_position = updateWallsFloodFill(X, Y, orientation, maze_state,
                                              wall_position)
 
         # check if at goal
-        if (checkGoal(X, Y, maze_state)):
+        if (check_goal_dfs(X, Y, goal)):
             # if (state == 0):
             #     # to bottom right corner
             #     maze_state = setGoal(maze_state, 'bottomright')
@@ -883,7 +870,7 @@ def main():
             #     break
 
             state += 1
-            API.clearAllColor()
+            # API.clearAllColor()
             history = []
             break
 
