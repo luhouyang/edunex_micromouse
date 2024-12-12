@@ -16,10 +16,11 @@ def mainConsole():
     width = 16
     height = 16
 
+    X = 0
+    Y = 0
+
     wall_position = mouse.get_empty_wall_position(width * 2 + 1,
                                                   height * 2 + 1)
-
-    flood = mouse.get_initial_flood(width, height, wall_position)
 
     # load maze from file
     # maze = loadMazeFromFile(
@@ -29,9 +30,6 @@ def mainConsole():
         'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     )
     wall_position = maze
-
-    X = 0
-    Y = 0
 
     # the mouse's orientation
     '''
@@ -48,6 +46,7 @@ def mainConsole():
     ###################
 
     history = []
+    flood = mouse.get_initial_flood(width, height, wall_position)
 
     while (True):
         # check if at goal
@@ -86,13 +85,11 @@ def mainQT():
     width = 16
     height = 16
 
-    wall_position = mouse.get_empty_wall_position(width * 2 + 1,
-                                                  height * 2 + 1)
-
-    flood = mouse.get_initial_flood(width, height, wall_position)
-
     X = 0
     Y = 0
+
+    wall_position = mouse.get_empty_wall_position(width * 2 + 1,
+                                                  height * 2 + 1)
 
     # state of the mouse, tracks the path finding progress
     # 0, 1, 2, 3 for each corner
@@ -114,6 +111,7 @@ def mainQT():
     ###################
 
     shortest_path = []
+    flood = mouse.get_initial_flood(width, height, wall_position)
 
     history = []
 
