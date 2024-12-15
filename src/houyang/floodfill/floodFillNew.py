@@ -12,10 +12,7 @@ sys.path.insert(
     1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
 
 import API
-import sys
 import numpy as np
-
-from MOUSE import SimulationMouse, RealMouse
 
 #########
 # utils #
@@ -255,17 +252,19 @@ def getEmptyWallPosition(width, height):
     wall_position = [[0] * width for _ in range(height)]
     return wall_position
 
+
 # generate flood
 def getInitialFlood(width, height, wall_position):
     flood_zero = [[-1] * width for _ in range(height)]
 
     for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood_zero[y][x] = 0
+        for x in range(int(width / 2) - 1, int(width / 2) + 1):
+            flood_zero[y][x] = 0
 
     flood = floodFill(flood_zero, wall_position)
 
     return flood
+
 
 #########################
 # check state functions #
@@ -470,6 +469,35 @@ def updateOrientation(orientation, turn):
 
     return (orientation)
 
+
+# set goal
+def setGoal(flood, preset='center', cx=0, cy=0):
+    height = len(flood)
+    width = len(flood[0])
+
+    # reset all squares
+    for y in range(height):
+        for x in range(width):
+            flood[y][x] = 1000
+
+    if (preset == 'center'):
+        for y in range(int(height / 2) - 1, int(height / 2) + 1):
+            for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                flood[y][x] = 0
+    elif (preset == 'topleft'):
+        flood[height - 1][0] = 0
+    elif (preset == 'topright'):
+        flood[height - 1][width - 1] = 0
+    elif (preset == 'bottomleft'):
+        flood[0][0] = 0
+    elif (preset == 'bottomright'):
+        flood[0][width - 1] = 0
+    elif (preset == 'custom'):
+        flood[cy][cx] = 0
+
+    return flood
+
+
 ##################
 # move functions #
 ##################
@@ -653,9 +681,9 @@ def main():
     # maze = loadMazeFromFile(
     #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     # )
-    maze = loadMazeFromFile(
-        'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
-    )
+    # maze = loadMazeFromFile(
+    #     'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    # )
 
     # the mouse's current (x, y) position in the maze
     X = 0
@@ -707,45 +735,26 @@ def main():
             # showMazeQT(X, Y, orientation, history, wall_position, flood)
 
             if (state == 0):
-                # to lower right corner
-                flood[0][width - 1] = 0
-                for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood[y][x] = 1000
+                # to bottom right corner
+                flood = setGoal(flood, 'bottomright')
             elif (state == 1):
                 # to center
-                flood[0][width - 1] = 1000
-                for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood[y][x] = 0
+                flood = setGoal(flood, 'center')
             elif (state == 2):
-                # to upper right corner
-                flood[height - 1][0] = 0
-                for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood[y][x] = 1000
+                # to top right corner
+                flood = setGoal(flood, 'topright')
             elif (state == 3):
                 # to center
-                flood[height - 1][0] = 1000
-                for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood[y][x] = 0
+                flood = setGoal(flood, 'center')
             elif (state == 4):
-                # to upper left corner
-                flood[height - 1][width - 1] = 0
-                for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood[y][x] = 1000
+                # to top left corner
+                flood = setGoal(flood, 'topleft')
             elif (state == 5):
-                # to starting position
-                flood[0][0] = 0
-                flood[height - 1][width - 1] = 1000
+                # to starting position, bottom left
+                flood = setGoal(flood, 'bottomleft')
             elif (state == 6):
-                # shortest path
-                flood[0][0] = 1000
-                for y in range(int(height / 2) - 1, int(height / 2) + 1):
-                    for x in range(int(width / 2) - 1, int(width / 2) + 1):
-                        flood[y][x] = 0
+                # shortest path, center
+                flood = setGoal(flood, 'center')
             else:
                 break
 
