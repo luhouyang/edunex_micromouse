@@ -265,10 +265,6 @@ def getEmptyWallPosition(width, height):
 def get_initial_maze_state_dfs(width, height):
     maze_state = [[-1] * width for _ in range(height)]
 
-    # for y in range(int(height / 2) - 1, int(height / 2)):
-    #     for x in range(int(width / 2) - 1, int(width / 2)):
-    #         maze_state[y][x] = 0
-
     return maze_state
 
 

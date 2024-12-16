@@ -21,15 +21,8 @@ import numpy as np
 
 class SimulationMouse():
 
-    def __init__(self, algorithm='FLOODFILL'):
-        '''
-        Acts as a flag to determine state, move, calculation functions
-        Available values:
-        1) FLOODFILL - FloodFill algorithm
-        2) DFS - Depth first search
-        3) BSF - Breadth first search
-        '''
-        self.algorithm = algorithm
+    def __init__(self):
+        pass
 
     #########
     # utils #
@@ -499,7 +492,3 @@ class SimulationMouse():
     # move
     def move(self, next_cell):
         API.moveForward()
-
-    # inverse path
-    def inverse_path(self, path):
-        pass

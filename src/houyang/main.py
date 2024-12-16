@@ -4,14 +4,15 @@ Below if for running in Console
 """
 
 
-def mainConsole():
+def mainConsole(delay=0):
+    import time
     from MOUSE import ConsoleMouse
 
     #######################
     # initialize variable #
     #######################
 
-    mouse = ConsoleMouse(algorithm='FLOODFILL')
+    mouse = ConsoleMouse(delay=delay)
 
     width = 16
     height = 16
@@ -23,12 +24,12 @@ def mainConsole():
                                                   height * 2 + 1)
 
     # load maze from file
-    # maze = loadMazeFromFile(
-    #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
-    # )
     maze = mouse.load_maze_from_file(
-        'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+        '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     )
+    # maze = mouse.load_maze_from_file(
+    #     'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+    # )
     wall_position = maze
 
     # the mouse's orientation
@@ -41,18 +42,44 @@ def mainConsole():
     '''
     orientation = 0
 
-    ###################
-    # Micromouse Code #
-    ###################
+    #############################
+    # Micromouse Code Floodfill #
+    #############################
 
+    state = 0
     history = []
     flood = mouse.get_initial_flood(width, height, wall_position)
 
     while (True):
         # check if at goal
         if (mouse.check_goal(X, Y, flood)):
+            mouse.show_maze(X, Y, orientation, history, wall_position, flood)
+            if (state == 0):
+                # to bottom right corner
+                flood = mouse.set_goal(flood, 'bottomright')
+            elif (state == 1):
+                # to center
+                flood = mouse.set_goal(flood, 'center')
+            elif (state == 2):
+                # to top right corner
+                flood = mouse.set_goal(flood, 'topright')
+            elif (state == 3):
+                # to center
+                flood = mouse.set_goal(flood, 'center')
+            elif (state == 4):
+                # to top left corner
+                flood = mouse.set_goal(flood, 'topleft')
+            elif (state == 5):
+                # to starting position, bottom left
+                flood = mouse.set_goal(flood, 'bottomleft')
+            elif (state == 6):
+                # shortest path, center
+                flood = mouse.set_goal(flood, 'center')
+            else:
+                break
+
+            state += 1
             history = []
-            break
 
         else:
             flood = mouse.floodfill_algorithm(flood, wall_position)
@@ -64,7 +91,93 @@ def mainConsole():
             orientation, X, Y = mouse.next_move_flood_fill(
                 X, Y, orientation, wall_position, flood)
 
+            time.sleep(delay)
             print()
+
+    #######################
+    # Micromouse Code DFS #
+    #######################
+
+    # lifo_stack = []
+    # trace_stack = []
+
+    # history = []
+
+    # maze_state = mouse.get_initial_maze_state_dfs(width, height)
+
+    # goal = [[width / 2 - 1, height / 2], [width / 2, height / 2],
+    #         [width / 2 - 1, height / 2 - 1], [width / 2, height / 2 - 1]]
+
+    # while (True):
+    #     # check if at goal
+    #     if (mouse.check_goal_dfs(X, Y, goal)):
+
+    #         mouse.show_maze(X, Y, orientation, history, wall_position,
+    #                         maze_state)
+
+    #         history = []
+    #         break
+
+    #     else:
+    #         history.append([X, Y])
+
+    #         mouse.show_maze(X, Y, orientation, history, wall_position,
+    #                         maze_state)
+
+    #         orientation, X, Y = mouse.next_move_dfs(X, Y, orientation,
+    #                                                 wall_position, lifo_stack,
+    #                                                 trace_stack, maze_state,
+    #                                                 history)
+    #         time.sleep(delay)
+    #         print()
+
+    #######################
+    # Micromouse Code BFS #
+    #######################
+
+    # maze_state = mouse.get_initial_maze_state_bfs(width, height)
+
+    # fifo_queue = []
+    # cell_parent_map = {}
+    # shortest = []
+
+    # history = []
+
+    # while (True):
+    #     # check if at goal
+    #     if (mouse.check_goal(X, Y, maze_state)):
+    #         shortest = mouse.shortest_path(X, Y, cell_parent_map,
+    #                                        wall_position, maze_state)
+
+    #         inv = mouse.inverse_path(shortest)
+
+    #         orientation, X, Y = mouse.move_shortest(X, Y, orientation, inv,
+    #                                                 maze_state, wall_position)
+
+    #         orientation, X, Y = mouse.move_shortest(X, Y, orientation,
+    #                                                 shortest, maze_state,
+    #                                                 wall_position)
+
+    #         break
+
+    #     else:
+    #         history.append([X, Y])
+
+    #         mouse.show_maze(X, Y, orientation, history, wall_position,
+    #                         maze_state)
+
+    #         orientation, X, Y = mouse.next_move_bfs(
+    #             X,
+    #             Y,
+    #             orientation,
+    #             wall_position,
+    #             maze_state,
+    #             fifo_queue,
+    #             cell_parent_map,
+    #         )
+
+    #         time.sleep(delay)
+    #         print()
 
 
 """
@@ -80,7 +193,7 @@ def mainQT():
     # initialize variable #
     #######################
 
-    mouse = SimulationMouse(algorithm='FLOODFILL')
+    mouse = SimulationMouse()
 
     width = 16
     height = 16
@@ -165,6 +278,6 @@ def mainQT():
 
 
 if __name__ == '__main__':
-    # mainConsole()
+    # mainConsole(delay=0.3)
     mainQT()
 # %%
