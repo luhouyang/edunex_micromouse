@@ -249,7 +249,7 @@ class ConsoleMouse():
         return orientation, x, y
 
     def next_move_dfs(self, x, y, orientation, wall_position, lifo_stack,
-                      trace_stack, maze_state, history):
+                      trace_stack, maze_state, history, cell_parent_map):
         # mark cell as visited
         maze_state[y][x] = 1
 
@@ -272,6 +272,7 @@ class ConsoleMouse():
         if (len(accessible_cells) != 0):
             for cell in accessible_cells:
                 lifo_stack.insert(0, cell)
+                cell_parent_map[(cell[0], cell[1])] = [x, y]
 
             while (True):
                 cell = lifo_stack.pop(0)
@@ -321,7 +322,7 @@ class ConsoleMouse():
 
             return self.next_move_dfs(x, y, orientation, wall_position,
                                       lifo_stack, trace_stack, maze_state,
-                                      history)
+                                      history, cell_parent_map)
 
     # bfs algorithm
     def backtrace_bfs(self, x, y, orientation, wall_position, maze_state,
@@ -414,7 +415,6 @@ class ConsoleMouse():
 
         return orientation, goal_cell[0], goal_cell[1]
 
-    # next move functions
     def next_move_bfs(self, x, y, orientation, wall_position, maze_state,
                       fifo_queue, cell_parent_map):
 
@@ -490,7 +490,6 @@ class ConsoleMouse():
                                       maze_state, fifo_queue, cell_parent_map,
                                       next_cell)
 
-    # inverse path
     def inverse_path(self, shortest):
         inv = []
 
