@@ -1,7 +1,7 @@
 #    General Logic & Utility Functions of a Micromouse in classes
 #
 #        1) ConsoleMouse
-#              - used for mms simulation
+#              - used for console
 #
 #    Example code in README.md
 # ========================================================================
@@ -10,7 +10,6 @@
 # imports #
 ###########
 
-import sys
 import time
 import numpy as np
 from colorama import Fore
@@ -28,14 +27,6 @@ class ConsoleMouse():
     #########
     # utils #
     #########
-
-    # print a message to the mms console
-    def log(self, msg):
-        sys.stderr.write(f"{msg}\n")
-
-    # reset states
-    def reset(self):
-        pass
 
     # show local memory maze state
     def show_maze(self, mx, my, orientation, history, wall_position, flood):
@@ -221,16 +212,12 @@ class ConsoleMouse():
                 ][0]
 
                 if (orientation == next_key):
-                    print("NO NEED TO TURN")
                     turning = 'F'
                 elif ((orientation + 1) % 4 == next_key):
-                    print("TURN RIGHT")
                     turning = 'R'
                 elif ((orientation - 1) % 4 == next_key):
-                    print("TURN LEFT")
                     turning = 'L'
                 else:
-                    print("TURN BACK")
                     turning = 'B'
 
                 orientation == next_key
@@ -746,9 +733,9 @@ class ConsoleMouse():
                 for x in range(int(width / 2) - 1, int(width / 2) + 1):
                     maze_state[y][x] = 0
         elif (preset == 'topleft'):
-            maze_state[height - 1][width - 1] = 0
-        elif (preset == 'topright'):
             maze_state[height - 1][0] = 0
+        elif (preset == 'topright'):
+            maze_state[height - 1][width - 1] = 0
         elif (preset == 'bottomleft'):
             maze_state[0][0] = 0
         elif (preset == 'bottomright'):
