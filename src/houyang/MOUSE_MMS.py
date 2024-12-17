@@ -21,15 +21,8 @@ import numpy as np
 
 class SimulationMouse():
 
-    def __init__(self, algorithm='FLOODFILL'):
-        '''
-        Acts as a flag to determine state, move, calculation functions
-        Available values:
-        1) FLOODFILL - FloodFill algorithm
-        2) DFS - Depth first search
-        3) BSF - Breadth first search
-        '''
-        self.algorithm = algorithm
+    def __init__(self):
+        pass
 
     #########
     # utils #
@@ -193,6 +186,409 @@ class SimulationMouse():
 
         return shortest_path
 
+    # dfs algorithm
+    def backtrace_dfs(self, x, y, orientation, wall_position, lifo_stack,
+                      trace_stack, maze_state, history):
+
+        x, y = trace_stack.pop(0)
+
+        while (True):
+            # get surrounding cells
+            surrounding_cells, remaining_cell_index = self.get_surround(
+                x, y, maze_state)
+
+            accessible_cells = self.is_accessible(x, y, wall_position,
+                                                  maze_state)
+
+            visited_cell = [
+                cell for cell in accessible_cells
+                if maze_state[cell[1]][cell[0]] == 1
+            ]
+
+            accessible_cells = [
+                cell for cell in accessible_cells if cell not in visited_cell
+            ]
+
+            if (len(accessible_cells) == 0):
+
+                next_cell = trace_stack.pop(0)
+
+                turning = 'F'
+                next_key = [
+                    key for key, val in remaining_cell_index.items()
+                    if val == next_cell
+                ][0]
+
+                if (orientation == next_key):
+                    turning = 'F'
+                elif ((orientation + 1) % 4 == next_key):
+                    API.turnRight()
+                    turning = 'R'
+                elif ((orientation - 1) % 4 == next_key):
+                    API.turnLeft()
+                    turning = 'L'
+                else:
+                    API.turnLeft()
+                    API.turnLeft()
+                    turning = 'B'
+
+                orientation == next_key
+
+                # call updateOrientation
+                orientation = self.update_orientation(orientation, turning)
+
+                # call move
+                self.move(next_cell)
+            else:
+                trace_stack.insert(0, [x, y])
+                break
+
+            x, y = next_cell
+
+        return orientation, x, y
+
+    def next_move_dfs(self, x, y, orientation, wall_position, lifo_stack,
+                      trace_stack, maze_state, history, cell_parent_map):
+        # mark cell as visited
+        maze_state[y][x] = 1
+
+        # get surrounding cells
+        surrounding_cells, remaining_cell_index = self.get_surround(
+            x, y, maze_state)
+
+        # get accessible cells
+        accessible_cells = self.is_accessible(x, y, wall_position, maze_state)
+
+        visited_cell = [
+            cell for cell in accessible_cells
+            if maze_state[cell[1]][cell[0]] == 1
+        ]
+
+        accessible_cells = [
+            cell for cell in accessible_cells if cell not in visited_cell
+        ]
+
+        if (len(accessible_cells) != 0):
+            for cell in accessible_cells:
+                lifo_stack.insert(0, cell)
+                cell_parent_map[(cell[0], cell[1])] = [x, y]
+
+            while (True):
+                cell = lifo_stack.pop(0)
+                if (maze_state[cell[1]][cell[0]] == -1):
+                    next_cell = cell
+                    trace_stack.insert(0, cell)
+                    break
+
+            # get turn orientation
+            '''
+            orients :
+                0- North
+                1- East
+                2- South
+                3- West 
+            '''
+            turning = 'F'
+            next_key = [
+                key for key, val in remaining_cell_index.items()
+                if val == next_cell
+            ][0]
+
+            if (orientation == next_key):
+                turning = 'F'
+            elif ((orientation + 1) % 4 == next_key):
+                API.turnRight()
+                turning = 'R'
+            elif ((orientation - 1) % 4 == next_key):
+                API.turnLeft()
+                turning = 'L'
+            else:
+                API.turnLeft()
+                API.turnLeft()
+                turning = 'B'
+
+            orientation == next_key
+
+            # call updateOrientation
+            orientation = self.update_orientation(orientation, turning)
+
+            # call move
+            self.move(next_cell)
+
+            return orientation, next_cell[0], next_cell[1]
+        else:
+            orientation, x, y = self.backtrace_dfs(x, y, orientation,
+                                                   wall_position, lifo_stack,
+                                                   trace_stack, maze_state,
+                                                   history)
+
+            return self.next_move_dfs(x, y, orientation, wall_position,
+                                      lifo_stack, trace_stack, maze_state,
+                                      history, cell_parent_map)
+
+    # bfs algorithm
+    def backtrace_bfs(self, x, y, orientation, wall_position, maze_state,
+                      fifo_queue, cell_parent_map, next_cell):
+
+        current_cell = [x, y]
+        goal_cell = next_cell
+        back_trace = []
+        forward_trace = []
+        full_trace = []
+
+        # trace from goal
+        while (True):
+            if ((next_cell[0], next_cell[1]) == (0, 0)):
+                break
+
+            next_cell = cell_parent_map[(next_cell[0], next_cell[1])]
+
+            # get accessible cells
+            accessible_cells = self.is_accessible(0, 0, wall_position,
+                                                  maze_state)
+
+            if (next_cell in accessible_cells):
+                back_trace.insert(0, next_cell)
+                back_trace.append(goal_cell)
+                break
+            else:
+                back_trace.insert(0, next_cell)
+
+        # trace from current
+        next_cell = current_cell
+        while (True):
+            if ((next_cell[0], next_cell[1]) == (0, 0)):
+                break
+
+            next_cell = cell_parent_map[(next_cell[0], next_cell[1])]
+
+            # get accessible cells
+            accessible_cells = self.is_accessible(0, 0, wall_position,
+                                                  maze_state)
+
+            if (next_cell in accessible_cells):
+                forward_trace.insert(0, next_cell)
+                break
+            else:
+                forward_trace.insert(0, next_cell)
+
+        common_nodes = [node for node in forward_trace if node in back_trace]
+
+        closest_ancestor = common_nodes[len(common_nodes) - 1]
+
+        for i in range(forward_trace.index(closest_ancestor),
+                       len(forward_trace)):
+            full_trace.insert(0, forward_trace[i])
+
+        for i in range(
+                back_trace.index(closest_ancestor) + 1, len(back_trace)):
+            full_trace.append(back_trace[i])
+
+        while (len(full_trace) > 0):
+            next_cell = full_trace.pop(0)
+
+            x, y = current_cell
+
+            # get surrounding cells
+            surrounding_cells, remaining_cell_index = self.get_surround(
+                x, y, maze_state)
+
+            turning = 'F'
+            next_key = [
+                key for key, val in remaining_cell_index.items()
+                if val == next_cell
+            ][0]
+
+            if (orientation == next_key):
+                turning = 'F'
+            elif ((orientation + 1) % 4 == next_key):
+                API.turnRight()
+                turning = 'R'
+            elif ((orientation - 1) % 4 == next_key):
+                API.turnLeft()
+                turning = 'L'
+            else:
+                API.turnLeft()
+                API.turnLeft()
+                turning = 'B'
+
+            orientation == next_key
+
+            # call updateOrientation
+            orientation = self.update_orientation(orientation, turning)
+
+            # call move
+            self.move(next_cell)
+
+            current_cell = next_cell
+
+        return orientation, goal_cell[0], goal_cell[1]
+
+    def next_move_bfs(self, x, y, orientation, wall_position, maze_state,
+                      fifo_queue, cell_parent_map):
+
+        if (maze_state[y][x] == -1):
+            # get surrounding cells
+            surrounding_cells, remaining_cell_index = self.get_surround(
+                x, y, maze_state)
+
+            # get accessible cells
+            accessible_cells = self.is_accessible(x, y, wall_position,
+                                                  maze_state)
+
+            visited_cell = [
+                cell for cell in accessible_cells
+                if maze_state[cell[1]][cell[0]] == 1
+            ]
+
+            accessible_cells = [
+                cell for cell in accessible_cells if cell not in visited_cell
+            ]
+
+            for cell in accessible_cells:
+                cell_parent_map[(cell[0], cell[1])] = [x, y]
+                fifo_queue.append(cell)
+
+            # mark cell as visited
+            maze_state[y][x] = 1
+
+            next_cell = fifo_queue.pop(0)
+
+            if (next_cell in accessible_cells):
+                # get turn orientation
+                '''
+                orients :
+                    0- North
+                    1- East
+                    2- South
+                    3- West
+                '''
+                turning = 'F'
+                next_key = [
+                    key for key, val in remaining_cell_index.items()
+                    if val == next_cell
+                ][0]
+
+                if (orientation == next_key):
+                    turning = 'F'
+                elif ((orientation + 1) % 4 == next_key):
+                    API.turnRight()
+                    turning = 'R'
+                elif ((orientation - 1) % 4 == next_key):
+                    API.turnLeft()
+                    turning = 'L'
+                else:
+                    API.turnLeft()
+                    API.turnLeft()
+                    turning = 'B'
+
+                orientation == next_key
+
+                # call updateOrientation
+                orientation = self.update_orientation(orientation, turning)
+
+                # call move
+                self.move(next_cell)
+
+                return orientation, next_cell[0], next_cell[1]
+            else:
+                return self.backtrace_bfs(x, y, orientation, wall_position,
+                                          maze_state, fifo_queue,
+                                          cell_parent_map, next_cell)
+        else:
+            next_cell = fifo_queue.pop(0)
+
+            return self.backtrace_bfs(x, y, orientation, wall_position,
+                                      maze_state, fifo_queue, cell_parent_map,
+                                      next_cell)
+
+    def inverse_path(self, shortest):
+        inv = []
+
+        for i in range(0, len(shortest) - 1):
+            inv.insert(0, shortest[i])
+
+        inv.append([0, 0])
+
+        return inv
+
+    def shortest_path(self, x, y, cell_parent_map, wall_position, maze_state):
+
+        next_cell = [x, y]
+
+        shortest = [next_cell]
+
+        while (True):
+            if ((next_cell[0], next_cell[1]) == (0, 0)):
+                break
+
+            next_cell = cell_parent_map[(next_cell[0], next_cell[1])]
+
+            # get accessible cells
+            accessible_cells = self.is_accessible(0, 0, wall_position,
+                                                  maze_state)
+
+            shortest.insert(0, next_cell)
+            if (next_cell in accessible_cells):
+                break
+
+        return shortest
+
+    def move_shortest(self, x, y, orientation, path, maze_state,
+                      wall_position):
+        history = [[x, y]]
+
+        while (len(path) > 0):
+            wall_position = self.update_walls(x, y, orientation, maze_state,
+                                              wall_position)
+
+            next_cell = path.pop(0)
+
+            # get surrounding cells
+            surrounding_cells, remaining_cell_index = self.get_surround(
+                x, y, maze_state)
+
+            # get turn orientation
+            '''
+            orients :
+                0- North
+                1- East
+                2- South
+                3- West
+            '''
+            turning = 'F'
+            next_key = [
+                key for key, val in remaining_cell_index.items()
+                if val == next_cell
+            ][0]
+
+            if (orientation == next_key):
+                turning = 'F'
+            elif ((orientation + 1) % 4 == next_key):
+                API.turnRight()
+                turning = 'R'
+            elif ((orientation - 1) % 4 == next_key):
+                API.turnLeft()
+                turning = 'L'
+            else:
+                API.turnLeft()
+                API.turnLeft()
+                turning = 'B'
+
+            orientation == next_key
+
+            # call updateOrientation
+            orientation = self.update_orientation(orientation, turning)
+
+            # call move
+            self.move(next_cell)
+
+            x, y = next_cell
+
+            history.append(next_cell)
+
+        return orientation, next_cell[0], next_cell[1]
+
     #########################
     # initializer functions #
     #########################
@@ -214,6 +610,21 @@ class SimulationMouse():
 
         return flood
 
+    # generate boolean maze_state
+    def get_initial_maze_state_bfs(self, width, height):
+        maze_state = [[-1] * width for _ in range(height)]
+
+        for y in range(int(height / 2) - 1, int(height / 2) + 1):
+            for x in range(int(width / 2) - 1, int(width / 2) + 1):
+                maze_state[y][x] = 0
+
+        return maze_state
+
+    def get_initial_maze_state_dfs(self, width, height):
+        maze_state = [[-1] * width for _ in range(height)]
+
+        return maze_state
+
     #########################
     # check state functions #
     #########################
@@ -223,6 +634,12 @@ class SimulationMouse():
         cell_val = flood[y][x]
 
         if (cell_val == 0):
+            return True
+        else:
+            False
+
+    def check_goal_dfs(self, x, y, goal):
+        if ([x, y] in goal):
             return True
         else:
             False
@@ -305,13 +722,13 @@ class SimulationMouse():
     ##########################
 
     # update walls
-    def update_walls_floodfill(self,
-                               x,
-                               y,
-                               orientation,
-                               maze_state,
-                               wall_position,
-                               color='G'):
+    def update_walls(self,
+                     x,
+                     y,
+                     orientation,
+                     maze_state,
+                     wall_position,
+                     color='G'):
         API.setColor(x, y, color)
 
         L = API.wallLeft()
@@ -499,7 +916,3 @@ class SimulationMouse():
     # move
     def move(self, next_cell):
         API.moveForward()
-
-    # inverse path
-    def inverse_path(self, path):
-        pass

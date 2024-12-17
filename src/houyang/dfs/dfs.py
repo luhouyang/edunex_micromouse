@@ -6,9 +6,9 @@
 import sys
 # caution: path[0] is reserved for script path (or '' in REPL)
 # replace 'houyang' with your name space
-# sys.path.insert(1, '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang')
-sys.path.insert(
-    1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
+sys.path.insert(1, '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang')
+# sys.path.insert(
+#     1, 'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang')
 
 import API
 import numpy as np
@@ -264,10 +264,6 @@ def getEmptyWallPosition(width, height):
 #     return maze_state
 def get_initial_maze_state_dfs(width, height):
     maze_state = [[-1] * width for _ in range(height)]
-
-    # for y in range(int(height / 2) - 1, int(height / 2)):
-    #     for x in range(int(width / 2) - 1, int(width / 2)):
-    #         maze_state[y][x] = 0
 
     return maze_state
 
@@ -640,7 +636,7 @@ def backtrace_dfs(x, y, orientation, wall_position, lifo_stack, trace_stack,
 
 
 def next_move_dfs(x, y, orientation, wall_position, lifo_stack, trace_stack,
-                  maze_state, history):
+                  maze_state, history, cell_parent_map):
     # mark cell as visited
     maze_state[y][x] = 1
 
@@ -661,6 +657,7 @@ def next_move_dfs(x, y, orientation, wall_position, lifo_stack, trace_stack,
     if (len(accessible_cells) != 0):
         for cell in accessible_cells:
             lifo_stack.insert(0, cell)
+            cell_parent_map[(cell[0], cell[1])] = [x, y]
 
         while (True):
             cell = lifo_stack.pop(0)
@@ -715,7 +712,7 @@ def next_move_dfs(x, y, orientation, wall_position, lifo_stack, trace_stack,
                                           history)
 
         return next_move_dfs(x, y, orientation, wall_position, lifo_stack,
-                             trace_stack, maze_state, history)
+                             trace_stack, maze_state, history, cell_parent_map)
 
 
 # move
@@ -730,13 +727,98 @@ def move(next_cell):
 
 
 # inverse path
-def inversePath(path):
-    pass
+def inverse_path_dfs(shortest):
+    inv = []
+
+    for i in range(0, len(shortest) - 1):
+        inv.insert(0, shortest[i])
+
+    inv.append([0, 0])
+
+    return inv
 
 
-# dfs algorithm
-def dfs_algorithm():
-    pass
+def shortest_path(x, y, cell_parent_map, wall_position, maze_state):
+
+    next_cell = [x, y]
+
+    shortest = [next_cell]
+
+    while (True):
+        if ((next_cell[0], next_cell[1]) == (0, 0)):
+            break
+
+        next_cell = cell_parent_map[(next_cell[0], next_cell[1])]
+
+        # get accessible cells
+        accessible_cells = isAccessible(0, 0, wall_position, maze_state)
+
+        shortest.insert(0, next_cell)
+        if (next_cell in accessible_cells):
+            # shortest.append([x, y])
+            break
+
+    return shortest
+
+
+def move_shortest(x, y, orientation, path, maze_state, wall_position):
+    history = [[x, y]]
+
+    while (len(path) > 0):
+        wall_position = updateWallsFloodFill(x, y, orientation, maze_state,
+                                             wall_position)
+
+        next_cell = path.pop(0)
+
+        # get surrounding cells
+        surrounding_cells, remaining_cell_index = getSurround(x, y, maze_state)
+
+        # get turn orientation
+        '''
+        orients :
+            0- North
+            1- East
+            2- South
+            3- West
+        '''
+        turning = 'F'
+        next_key = [
+            key for key, val in remaining_cell_index.items()
+            if val == next_cell
+        ][0]
+
+        if (orientation == next_key):
+            # print("NO NEED TO TURN")
+            turning = 'F'
+        elif ((orientation + 1) % 4 == next_key):
+            API.turnRight()
+            # print("TURN RIGHT")
+            turning = 'R'
+        elif ((orientation - 1) % 4 == next_key):
+            API.turnLeft()
+            # print("TURN LEFT")
+            turning = 'L'
+        else:
+            API.turnLeft()
+            API.turnLeft()
+            # print("TURN BACK")
+            turning = 'B'
+
+        orientation == next_key
+
+        # call updateOrientation
+        orientation = updateOrientation(orientation, turning)
+
+        # call move
+        move(next_cell)
+
+        x, y = next_cell
+
+        history.append(next_cell)
+
+        # showMaze(x, y, orientation, history, wall_position, maze_state)
+
+    return orientation, next_cell[0], next_cell[1]
 
 
 ########
@@ -832,6 +914,7 @@ def main():
     ###################
 
     lifo_stack = []
+    cell_parent_map = {}
     trace_stack = []
 
     history = []
@@ -869,7 +952,17 @@ def main():
             # else:
             #     break
 
-            state += 1
+            shortest = shortest_path(X, Y, cell_parent_map, wall_position,
+                                     maze_state)
+            inv = inverse_path_dfs(shortest)
+            API.clearAllColor()
+            orientation, X, Y = move_shortest(X, Y, orientation, inv,
+                                              maze_state, wall_position)
+            API.clearAllColor()
+            orientation, X, Y = move_shortest(X, Y, orientation, shortest,
+                                              maze_state, wall_position)
+
+            # state += 1
             # API.clearAllColor()
             history = []
             break
@@ -887,7 +980,8 @@ def main():
 
             orientation, X, Y = next_move_dfs(X, Y, orientation, wall_position,
                                               lifo_stack, trace_stack,
-                                              maze_state, history)
+                                              maze_state, history,
+                                              cell_parent_map)
 
             # print(lifo_stack)
             # print(trace_stack)
