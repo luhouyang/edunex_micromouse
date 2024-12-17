@@ -1,7 +1,7 @@
 #    General Logic & Utility Functions of a Micromouse in classes
 #
 #        1) ConsoleMouse
-#              - used for mms simulation
+#              - used for console
 #
 #    Example code in README.md
 # ========================================================================
