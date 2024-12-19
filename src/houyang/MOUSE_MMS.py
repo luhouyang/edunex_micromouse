@@ -112,6 +112,22 @@ class SimulationMouse():
     ##############
 
     # floodfill algorithm
+    """
+    PSEUDOCODE
+
+    1. INITIALIZE 
+        queue = empty list
+        initial_flood = 2D list fill with -1
+    2. ENQUEUE all cell with value = 0
+    3. WHILE queue IS NOT EMPTY
+    4.      current_cell = queue.pop()
+    5.      next_value = current_cell_value + 1
+    6.      GET accessible cells from current_cell
+    7.      if accessible cells == -1
+    8.          ASSIGN cell value = next_value
+    9.          ENQUEUE accessible cell
+    """
+
     def floodfill_algorithm(self, flood, wall_position):
         width = len(flood[0])
         height = len(flood)
