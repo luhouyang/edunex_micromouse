@@ -51,5 +51,14 @@ def calc_perimeter(height, width):
     return perimeter
 
 
-print(calc_perimeter(2, 3))
-print(calc_perimeter(5, 5))
+# print(calc_perimeter(2, 3))
+# print(calc_perimeter(5, 5))
+
+my_int = 4
+
+if (my_int > 4):
+    print('Greater than 4')
+elif (my_int == 4):
+    print('Equal 4')
+else:
+    print('Less than 4')
