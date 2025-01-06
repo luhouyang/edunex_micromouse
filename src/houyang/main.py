@@ -276,6 +276,13 @@ def mainQT(algo='floodfill'):
                 else:
                     break
 
+                # if (state == 0):
+                #     flood = mouse.set_goal(flood, 'bottomleft')
+                # elif (state == 1):
+                #     flood = mouse.set_goal(flood, 'center')
+                # else:
+                #     break
+
                 state += 1
                 API.clearAllColor()
                 history = []
