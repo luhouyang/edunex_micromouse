@@ -562,7 +562,7 @@ class ConsoleMouse():
 
             time.sleep(self.delay)
 
-        return orientation, next_cell[0], next_cell[1]
+        return orientation, next_cell[0], next_cell[1], history
 
     #########################
     # initializer functions #

@@ -28,7 +28,7 @@ def mainConsole(delay=0, algo='floodfill'):
     #     '/home/lulu/Desktop/edunex/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
     # )
     maze = mouse.load_maze_from_file(
-        'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/src/houyang/mazes/AAMC15Maze.txt'
+        'C:/Users/User/Desktop/Python/micromouse/edunex_micromouse/BFS_FloodFill_Maze3.txt'
     )
     wall_position = maze
 
@@ -79,9 +79,11 @@ def mainConsole(delay=0, algo='floodfill'):
                     # shortest path, center
                     flood = mouse.set_goal(flood, 'center')
                 else:
+                    short = len(history)
                     break
 
                 state += 1
+
                 history = []
 
             else:
@@ -121,14 +123,15 @@ def mainConsole(delay=0, algo='floodfill'):
 
                 shortest = mouse.shortest_path(X, Y, cell_parent_map,
                                                wall_position, maze_state)
+                short = len(shortest)
                 inv = mouse.inverse_path(shortest)
 
-                orientation, X, Y = mouse.move_shortest(
+                orientation, X, Y, history = mouse.move_shortest(
                     X, Y, orientation, inv, maze_state, wall_position)
                 mouse.show_maze(X, Y, orientation, history, wall_position,
                                 maze_state)
 
-                orientation, X, Y = mouse.move_shortest(
+                orientation, X, Y, history = mouse.move_shortest(
                     X, Y, orientation, shortest, maze_state, wall_position)
                 mouse.show_maze(X, Y, orientation, history, wall_position,
                                 maze_state)
@@ -164,13 +167,13 @@ def mainConsole(delay=0, algo='floodfill'):
             if (mouse.check_goal(X, Y, maze_state)):
                 shortest = mouse.shortest_path(X, Y, cell_parent_map,
                                                wall_position, maze_state)
-
+                short = len(shortest)
                 inv = mouse.inverse_path(shortest)
 
-                orientation, X, Y = mouse.move_shortest(
+                orientation, X, Y, history = mouse.move_shortest(
                     X, Y, orientation, inv, maze_state, wall_position)
 
-                orientation, X, Y = mouse.move_shortest(
+                orientation, X, Y, history = mouse.move_shortest(
                     X, Y, orientation, shortest, maze_state, wall_position)
 
                 break
@@ -193,6 +196,8 @@ def mainConsole(delay=0, algo='floodfill'):
 
                 time.sleep(delay)
                 print()
+
+    print(f'Path Length: {short}')
 
 
 """
@@ -411,5 +416,5 @@ if __name__ == '__main__':
     algo = 'floodfill' | 'dfs' | 'bfs'
     """
 
-    run(mode='qt', algo='floodfill', delay=0.075)
+    run(mode='console', algo='bfs', delay=0.0)
 # %%
